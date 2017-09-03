@@ -1,5 +1,4 @@
--- Making Sense of Multiple Monads – James Bowen
---  https://medium.com/@james_32022/making-sense-of-multiple-monads-a51aeebd0d4d
+module Lib where
 
 import Control.Monad.Trans.Class (lift)
 import Control.Monad.Trans.Maybe (MaybeT(..))
@@ -33,17 +32,17 @@ oneTransformer = do ask <- runMaybeT ask
                                 Just (u, e) -> login u e
 
 
+---- | This was also in the tutorial. How to make it work?
+
 type Env = (Maybe String, Maybe String)
 
--- How to make this operational?
-readUserName' :: MaybeT (ReaderT Env IO) String
-readUserName' = MaybeT $ do
-  (maybeOldUser, _) <- ask
-  case maybeOldUser of
-    Just str -> return str
-    Nothing -> do 
-      input <- lift getLine -- lift allows IO from inside ReaderT Env IO
-      if length input > 5
-        then return (Just input)
-        else return Nothing
-
+--readUserName' :: MaybeT (ReaderT Env IO) String
+--readUserName' = MaybeT $ do
+--  (maybeOldUser, _) <- ask
+--  case maybeOldUser of
+--    Just str -> return str
+--    Nothing -> do 
+--      input <- lift getLine -- lift allows IO from inside ReaderT Env IO
+--      if length input > 5
+--        then return (Just input)
+--        else return Nothing
