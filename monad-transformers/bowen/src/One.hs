@@ -13,19 +13,19 @@ readUserName = MaybeT $ do
   if length str > 5 then return $ Just str
                     else return Nothing
 
-ask :: MaybeT IO (String, String)
-ask = do usr <- readUserName -- ** (referred to below)
-         email <- readEmailAddress
+getThingsFromUser :: MaybeT IO (String, String)
+getThingsFromUser = do usr <- readUserName -- ** (referred to below)
+                       email <- readEmailAddress
          -- In the MaybeT monad, unwrapping a {MaybeT f} means unwrapping f.
          -- How could we deduce that from the definition of Maybe T?
-         return (usr, email)
+                       return (usr, email)
 
 login :: String -> String -> IO ()
 login a b = putStrLn $ "Hello " ++ a ++ ", your email is " ++ b ++ "."
 
 oneTransformer :: IO ()
-oneTransformer = do ask <- runMaybeT ask
+oneTransformer = do things <- runMaybeT getThingsFromUser
   -- whereas one MaybeT do loop can run another one directly (see ** above)
   -- this IO do loop needs to use runMaybeT to run a MaybeT
-                    case ask of Nothing -> print "Couldn't login!"
-                                Just (u, e) -> login u e
+                    case things of Nothing -> print "Couldn't login!"
+                                   Just (u, e) -> login u e
