@@ -1,0 +1,13 @@
+flags: {}
+setup-info:
+  ghc:
+    linux64:
+      8.2.1:
+        url: https://downloads.haskell.org/~ghc/8.2.1/ghc-8.2.1-x86_64-deb8-linux.tar.xz
+        sha1: 3e52527de6f1cad6d7f1c392ddde8148116d4e36
+        content-length: 126809836
+extra-deps:
+
+compiler-check: match-exact
+compiler: ghc-8.2.1
+resolver: ghc-8.2.1
