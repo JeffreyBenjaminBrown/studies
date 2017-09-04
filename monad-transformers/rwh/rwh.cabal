@@ -15,7 +15,7 @@ library
                      , directory
                      , filepath
 
-                     -- uh-oh: these are different!
+                     -- problem: these two libraries differ
                      , mtl
                      -- , transformers
   default-language:    Haskell2010

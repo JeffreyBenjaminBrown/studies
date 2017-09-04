@@ -4,17 +4,27 @@ module MTComposition where
 import Control.Monad.Writer
 import MaybeT
 
+okay :: MonadWriter [String] m => m Int
+okay = do
+  tell ["about to succeed"]
+  return 3
+
 problem :: MonadWriter [String] m => m ()
 problem = do
-  tell ["this is where i fail"]
+  tell ["about to fail"]
   fail "oops"
 
-type A = WriterT [String] Maybe
+-- newtype WriterT w (m :: * -> *) a = WriterT {runWriterT :: m (a, w)}
+-- newtype MaybeT (m :: * -> *) a = MaybeT {runMaybeT :: m (Maybe a)}
 
-type B = MaybeT (Writer [String])
+aOkay :: WriterT [String] Maybe Int
+aOkay = okay
 
-a :: A ()
-a = problem
+bOkay :: MaybeT (Writer [String]) Int
+bOkay = okay
 
-b :: B ()
-b = problem
+aProb :: WriterT [String] Maybe ()
+aProb = problem
+
+bProb :: MaybeT (Writer [String]) ()
+bProb = problem
