@@ -2,10 +2,11 @@
              UndecidableInstances #-}
 
 module MaybeT
-    (
-      MaybeT
-    , runMaybeT
-    ) where
+--    (
+--      MaybeT
+--    , runMaybeT
+--    )
+where
 import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.State
@@ -15,13 +16,15 @@ import Control.Monad.Writer
 newtype MaybeT m a = MaybeT {
       runMaybeT :: m (Maybe a)
     }
- 
+
 bindMT :: (Monad m) => MaybeT m a -> (a -> MaybeT m b) -> MaybeT m b
 x `bindMT` f = MaybeT $ do
                  unwrapped <- runMaybeT x
                  case unwrapped of
                    Nothing -> return Nothing
                    Just y -> runMaybeT (f y)
+  -- in the Just y case, runMaybeT unwraps f y, only to have it wrapped
+  -- back up by the MaybeT outside the do loop
 
 x `altBindMT` f =
     MaybeT $ runMaybeT x >>= maybe (return Nothing) (runMaybeT . f)
@@ -32,6 +35,7 @@ returnMT a = MaybeT $ return (Just a)
 failMT :: (Monad m) => t -> MaybeT m a
 failMT _ = MaybeT $ return Nothing
 
+-- needed in later versions of GHCI
 instance Monad m => Applicative (MaybeT m) where
   pure = returnMT
   (<*>) a b = MaybeT $ do
@@ -43,7 +47,7 @@ instance Monad m => Applicative (MaybeT m) where
  
 instance (Monad m) => Monad (MaybeT m) where
   return = returnMT
-  (>>=) = bindMT
+  (>>=) = altBindMT
   fail = failMT
 
 instance MonadTrans MaybeT where
