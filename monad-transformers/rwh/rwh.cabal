@@ -10,6 +10,7 @@ library
                      , LocalReader
                      , UglyStack
                      , MaybeT
+                     , MTComposition
   build-depends:       base >= 4.7 && < 5
                      , directory
                      , filepath
