@@ -7,6 +7,9 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Lib
+                     , Equivalent
+                     , Order
+                     , UseGet
                      , Stale
   build-depends:       base >= 4.7 && < 5
                      , transformers
