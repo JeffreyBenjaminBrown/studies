@@ -5,9 +5,9 @@ module Equivalent where
 
 import Control.Monad.Trans.State
 
-f,g,h :: Int -> State Int ()
-f i = modify (+i)
-g i = get >>= (\s -> put $ s + i) >> return ()
-h i = do x <- get
-         put $ x + i
-         return ()
+eq1,eq2,eq3 :: Int -> State Int ()
+eq1 i = modify (+i)
+eq2 i = get >>= (\s -> put $ s + i) >> return ()
+eq3 i = do x <- get
+           put $ x + i
+           return ()
