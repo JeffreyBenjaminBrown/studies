@@ -11,3 +11,4 @@ f i = modify (+i)
 
 go :: Int
 go = snd $ runState (mapM_ f [1..4]) 0
+
