@@ -22,8 +22,8 @@ liftedChain = do
   let f i | i < 0 = Left "too low"
          | otherwise = Right i
   x <- lift $ mapM f [1..4]
-  y <- lift $ mapM f [-11..4]
-  z <- lift $ mapM f [1..4]
+  y <- lift $ mapM f [-11..4] -- gives a Left
+  z <- lift $ mapM f [1..4]   -- so does this evaluate?
   return x
 
 testLiftedChain :: StateT [Int] (EitherT String IO) [Int]
