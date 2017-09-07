@@ -13,8 +13,9 @@ useGet = EitherT $ do -- if "state $" preceded "do" here, could not use get
   case x of [] -> state $ const (Left "agh", x)
             a:as ->  state $ const (Right a,as)
 
-useBothLevels :: StateT Int (Either String) Int
-useBothLevels = do
+useBothLevels :: Int -> StateT Int (Either String) Int
+useBothLevels i = do
   x <- get
-  y <- lift $ Left "doh!"
-  return 3
+  y <- case i > 0 of True -> lift $ Right i
+                     False -> lift $ Left "doh!"
+  return y
