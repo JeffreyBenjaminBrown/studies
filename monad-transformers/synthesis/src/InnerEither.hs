@@ -12,19 +12,17 @@ import Control.Monad
 chainOfEithers :: StateT Int (Either String) Int
 chainOfEithers = do
   x <- lift $ Right 1
-  y <- lift $ Right "hi!"
-  z <- lift $ Left "this is the last line to execute"
+  y <- lift $ Left "this is the last line to execute"
   z <- lift $ Right (False,"imaginary")
   return x
 
 liftedChain :: StateT [Int] (Either String) [Int]
 liftedChain = do
   let f i | i < 0 = Left "too low"
-         | otherwise = Right i
-  x <- lift $ mapM f [1..4]
-  y <- lift $ mapM f [-11..4] -- gives a Left
-  z <- lift $ mapM f [1..4]   -- so does this evaluate?
-  return x
+          | otherwise = Right i
+  y <- lift $ mapM f [-11..4] -- this gives a Left
+  z <- lift $ mapM f [1..4]   -- so is this evaluated?
+  return z
 
 testLiftedChain :: StateT [Int] (EitherT String IO) [Int]
 testLiftedChain = do
@@ -37,10 +35,3 @@ testLiftedChain = do
   z <- lift $ mapM f [1..4]
   lift $ lift $ print "more positives evaluated"
   return [1]
-
--- | Running it shows that it does not stop at the first Left:
--- > runEitherT $ runStateT testLiftedChain []
--- "positives evaluated"
--- "negatives evaluated"
--- "more positives evaluated"
--- Right ([1],[])
